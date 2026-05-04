@@ -768,6 +768,7 @@ function payKaspi() {
   if(items.length===0) return;
   const total = PRODUCTS.reduce((s,p)=>s+(cart[p.id]||0)*p.price,0);
   document.getElementById('payAmount').textContent = total.toLocaleString('ru-RU') + ' ₸';
+  sendTelegram(items, total); 
   closeSheet();
   document.getElementById('payScreen').classList.add('open');
   document.body.style.overflow='hidden';
