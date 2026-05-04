@@ -749,6 +749,35 @@ function closeSheet() {
   document.body.style.overflow='';
 }
 
+const TG_TOKEN = '8795943800:AAGTs2A2jxLds6aGKbN59YhfTZ7C7W8jCf8';
+const TG_CHAT  = '640470461';
+ 
+function sendTelegram(items, total) {
+  const time = new Date().toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit'});
+  const lines = items.map(p =>
+    `• ${p.name} × ${cart[p.id]} = ${(cart[p.id]*p.price).toLocaleString('ru-RU')} ₸`
+  ).join('\n');
+ 
+  const msg =
+`🛒 *Новый заказ!* (${time})
+──────────────
+${lines}
+──────────────
+💰 *Итого: ${total.toLocaleString('ru-RU')} ₸*
+ 
+📞 Номер для перевода: +77751035863`;
+ 
+  fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      chat_id: TG_CHAT,
+      text: msg,
+      parse_mode: 'Markdown'
+    })
+  }).catch(()=>{}); // silent fail — don't block the UI
+}
+  
 /* ── KASPI PAY ── */
 function payKaspi() {
   const items = PRODUCTS.filter(p=>(cart[p.id]||0)>0);
