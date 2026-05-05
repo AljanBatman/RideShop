@@ -1,54 +1,783 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<title>Taxi Shop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Karla:wght@300;400;500;600&family=Cormorant:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 
-    <meta charset="UTF-8"> 
-    <title> Rock Paper Scissors Referee</title>
-    <link rel="stylesheet" href="stylesheet.css">
+:root{
+  --bg:#000000;
+  --s1:#111111;
+  --s2:#181818;
+  --s3:#202020;
+  --border:#1f1f1f;
+  --border2:#2a2a2a;
+  --border3:#333;
+  --kaspi:#e31e24;
+  --kaspi2:#ff2d2d;
+  --kaspi-dim:rgba(227,30,36,0.12);
+  --gold:#c4a24a;
+  --gold2:#dbb96a;
+  --gold-dim:rgba(196,162,74,0.12);
+  --text:#f0ece5;
+  --text2:#b0aa9f;
+  --muted:#5a5650;
+  --muted2:#2e2c2a;
+  --font:'Karla',sans-serif;
+  --font-d:'Cormorant',serif;
+  --r:14px;
+  --r-sm:10px;
+}
 
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+html{background:var(--bg);overflow-x:hidden}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font);
+  max-width:430px;
+  margin:0 auto;
+  min-height:100dvh;
+  overflow-x:hidden;
+  padding-bottom:110px;
+}
 
-    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
+/* ── NAV ── */
+nav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(0,0,0,0.92);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+  height:54px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 16px;
+}
 
+.cart-btn{
+  display:flex;align-items:center;gap:6px;
+  background:var(--s2);
+  border:1px solid var(--border2);
+  border-radius:100px;
+  padding:7px 13px;
+  font-size:12px;font-family:var(--font);font-weight:500;
+  color:var(--text2);
+  cursor:pointer;
+  transition:border-color .2s,color .2s;
+}
+.cart-btn:active{background:var(--s3)}
+
+.cart-badge{
+  background:var(--gold);
+  color:#000;
+  border-radius:50%;
+  width:16px;height:16px;
+  font-size:9px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;
+}
+.cart-badge.pop{animation:pop .2s ease}
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.5)}100%{transform:scale(1)}}
+
+/* ── HERO ── */
+.hero{
+  padding:24px 16px 18px;
+  border-bottom:1px solid var(--border);
+  animation:fadeUp .45s ease both;
+}
+.hero-title{
+  font-family:var(--font-d);
+  font-size:34px;font-weight:300;line-height:1.1;
+  color:var(--text);
+}
+.hero-title em{font-style:italic;color:var(--gold2)}
+.hero-sub{
+  margin-top:8px;
+  font-size:12px;color:var(--muted);font-weight:300;line-height:1.6;
+}
+
+/* ── PRODUCT GRID ── */
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  padding:16px 16px 0;
+}
+
+/* ── PRODUCT CARD ── */
+.card{
+  background:var(--s1);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  overflow:hidden;
+  display:flex;flex-direction:column;
+  transition:border-color .2s;
+  animation:fadeUp .45s ease both;
+}
+.card:nth-child(1){animation-delay:.07s}
+.card:nth-child(2){animation-delay:.12s}
+.card:nth-child(3){animation-delay:.17s}
+.card:nth-child(4){animation-delay:.22s}
+.card:nth-child(5){animation-delay:.27s}
+.card:nth-child(6){animation-delay:.32s}
+
+.card-img{
+  width:100%;
+  aspect-ratio:1/1;
+  background:var(--s2);
+  border-bottom:1px solid var(--border);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:6px;
+  position:relative;
+  overflow:hidden;
+}
+.card-img::after{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(
+    -45deg,transparent,transparent 18px,
+    rgba(255,255,255,0.01) 18px,rgba(255,255,255,0.01) 19px
+  );
+}
+.img-icon{
+  width:38px;height:38px;
+  border:1px dashed var(--border3);
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  z-index:1;
+}
+.img-icon svg{width:16px;height:16px;stroke:var(--muted2);fill:none;stroke-linecap:round;stroke-linejoin:round}
+.img-hint{font-size:9px;color:var(--muted2);letter-spacing:0.05em;z-index:1}
+
+.card-body{
+  padding:11px 11px 12px;
+  display:flex;flex-direction:column;flex:1;
+}
+.card-name{
+  font-size:13px;font-weight:500;
+  color:var(--text);
+  margin-bottom:2px;line-height:1.2;
+}
+.card-desc{
+  font-size:10px;color:var(--muted);
+  font-weight:300;line-height:1.4;
+  margin-bottom:10px;flex:1;
+}
+.card-bottom{
+  display:flex;align-items:center;justify-content:space-between;gap:6px;
+}
+.card-price{
+  font-family:var(--font-d);
+  font-size:17px;font-weight:400;
+  color:var(--gold2);
+  letter-spacing:0.01em;
+}
+.card-price span{font-size:11px;color:var(--muted);font-family:var(--font);font-weight:300}
+
+.buy-btn{
+  height:30px;
+  padding:0 12px;
+  background:var(--gold);
+  color:#000;
+  border:none;
+  border-radius:100px;
+  font-family:var(--font);
+  font-size:10px;font-weight:600;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:background .15s,transform .1s;
+  white-space:nowrap;
+}
+.buy-btn:active{transform:scale(0.95);background:var(--gold2)}
+.buy-btn.in-cart{
+  background:var(--gold-dim);
+  color:var(--gold);
+  border:1px solid rgba(196,162,74,0.3);
+}
+
+/* ── STICKY CART BAR ── */
+.cart-bar{
+  position:fixed;
+  bottom:0;left:50%;
+  transform:translateX(-50%) translateY(100%);
+  width:100%;max-width:430px;
+  background:var(--kaspi);
+  padding:12px 16px 28px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  z-index:60;
+  transition:transform .35s cubic-bezier(0.32,0.72,0,1);
+  cursor:pointer;
+}
+.cart-bar.visible{transform:translateX(-50%) translateY(0)}
+.cart-bar-left{display:flex;align-items:center;gap:10px}
+.cart-bar-count{
+  background:rgba(255,255,255,0.25);
+  border-radius:50%;
+  width:26px;height:26px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:600;color:#fff;
+}
+.cart-bar-label{font-size:13px;font-weight:500;color:#fff}
+.cart-bar-total{
+  font-family:var(--font-d);
+  font-size:20px;font-weight:300;color:#fff;
+  letter-spacing:0.02em;
+}
+
+/* ── SHEET OVERLAY ── */
+.overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0);
+  z-index:70;
+  pointer-events:none;
+  transition:background .3s;
+}
+.overlay.open{
+  background:rgba(0,0,0,0.7);
+  pointer-events:all;
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+}
+
+/* ── CART SHEET ── */
+.sheet{
+  position:fixed;
+  bottom:0;left:50%;
+  transform:translateX(-50%) translateY(100%);
+  width:100%;max-width:430px;
+  background:var(--s1);
+  border-top:1px solid var(--border2);
+  border-radius:20px 20px 0 0;
+  z-index:80;
+  transition:transform .38s cubic-bezier(0.32,0.72,0,1);
+  max-height:90dvh;
+  display:flex;flex-direction:column;
+}
+.sheet.open{transform:translateX(-50%) translateY(0)}
+
+.sheet-handle{
+  width:32px;height:3px;
+  background:var(--border2);border-radius:2px;
+  margin:10px auto 0;flex-shrink:0;
+}
+.sheet-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px 12px;
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;
+}
+.sheet-title{
+  font-family:var(--font-d);
+  font-size:22px;font-weight:300;letter-spacing:0.03em;
+}
+.sheet-x{
+  width:28px;height:28px;
+  background:var(--s2);border:1px solid var(--border2);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:13px;color:var(--muted);
+}
+.sheet-x:active{background:var(--s3)}
+.sheet-body{overflow-y:auto;flex:1;padding:0 18px}
+.sheet-empty{
+  text-align:center;padding:40px 0;
+  color:var(--muted);font-size:13px;font-weight:300;line-height:1.7;
+}
+
+.cart-item{
+  display:flex;align-items:center;
+  padding:13px 0;
+  border-bottom:1px solid var(--border);
+  gap:12px;
+}
+.ci-info{flex:1;min-width:0}
+.ci-name{font-size:13px;font-weight:500;margin-bottom:2px;color:var(--text)}
+.ci-price{font-size:11px;color:var(--gold);font-weight:300}
+.ci-qty{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.cq-btn{
+  width:26px;height:26px;
+  background:var(--s2);border:1px solid var(--border2);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:14px;font-weight:300;color:var(--text);
+  transition:background .15s;user-select:none;
+}
+.cq-btn:active{background:var(--s3)}
+.cq-num{font-size:13px;font-weight:500;min-width:14px;text-align:center}
+
+/* ── SHEET FOOTER ── */
+.sheet-foot{
+  padding:14px 18px 28px;
+  border-top:1px solid var(--border);
+  flex-shrink:0;
+}
+.total-row{
+  display:flex;justify-content:space-between;align-items:baseline;
+  margin-bottom:14px;
+}
+.total-lbl{font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted)}
+.total-val{font-family:var(--font-d);font-size:26px;font-weight:300;color:var(--gold2)}
+
+.open-kaspi-btn{
+  width:100%;height:54px;
+  background:var(--kaspi);
+  border:none;border-radius:var(--r-sm);
+  font-family:var(--font);font-size:15px;font-weight:600;
+  color:#fff;letter-spacing:0.03em;
+  cursor:pointer;
+  transition:background .15s,transform .1s;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.open-kaspi-btn:active{transform:scale(0.98);background:var(--kaspi2)}
+.pay-note{
+  margin-top:10px;text-align:center;
+  font-size:10px;color:var(--muted);line-height:1.5;
+}
+
+/* ── PAYMENT SCREEN ── */
+.pay-screen{
+  display:none;
+  position:fixed;inset:0;
+  background:var(--bg);
+  z-index:200;
+  flex-direction:column;
+  max-width:430px;
+  margin:0 auto;
+  overflow-y:auto;
+}
+.pay-screen.open{display:flex}
+
+.pay-top{
+  padding:18px 18px 0;
+  flex-shrink:0;
+}
+.pay-back{
+  display:flex;align-items:center;gap:6px;
+  font-size:13px;color:var(--muted);cursor:pointer;
+  padding:8px 0;width:fit-content;
+}
+.pay-back svg{width:16px;height:16px;stroke:var(--muted);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.pay-back:active{color:var(--text)}
+
+.pay-body{
+  flex:1;
+  display:flex;flex-direction:column;
+  align-items:center;
+  padding:24px 28px 48px;
+}
+
+.pay-kaspi-badge{
+  width:64px;height:64px;
+  background:var(--kaspi);
+  border-radius:18px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;font-weight:700;color:#fff;
+  font-family:var(--font);
+  margin-bottom:16px;
+  box-shadow:0 8px 32px rgba(227,30,36,0.35);
+}
+.pay-instruction{
+  font-size:11px;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:24px;text-align:center;
+}
+
+.pay-number-box{
+  width:100%;
+  background:var(--s1);
+  border:1px solid var(--border2);
+  border-radius:var(--r);
+  padding:18px 20px;
+  margin-bottom:10px;
+  position:relative;
+}
+.pay-number-label{
+  font-size:10px;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:6px;
+}
+.pay-number-value{
+  font-size:26px;font-weight:500;color:var(--text);
+  letter-spacing:0.04em;
+}
+.copy-btn{
+  position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  background:var(--s2);border:1px solid var(--border2);
+  border-radius:8px;padding:6px 12px;
+  font-size:11px;font-weight:500;color:var(--text2);
+  cursor:pointer;transition:all .15s;font-family:var(--font);
+}
+.copy-btn:active{background:var(--border2)}
+.copy-btn.copied{color:var(--gold);border-color:rgba(196,162,74,0.3)}
+
+.pay-amount-box{
+  width:100%;
+  background:var(--s1);
+  border:1px solid var(--border2);
+  border-radius:var(--r);
+  padding:18px 20px;
+  margin-bottom:24px;
+}
+.pay-amount-label{
+  font-size:10px;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:6px;
+}
+.pay-amount-value{
+  font-family:var(--font-d);
+  font-size:34px;font-weight:300;color:var(--gold2);
+}
+
+.pay-steps{
+  width:100%;
+  display:flex;flex-direction:column;
+  margin-bottom:16px;
+}
+.pay-step{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:13px 0;
+  border-bottom:1px solid var(--border);
+}
+.pay-step:last-child{border:none}
+.step-num{
+  width:22px;height:22px;
+  border:1px solid var(--border2);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:500;color:var(--muted);
+  flex-shrink:0;margin-top:1px;
+}
+.step-text{font-size:13px;color:var(--text2);line-height:1.5;flex:1}
+.step-text strong{color:var(--text);font-weight:500}
+
+.pay-footnote{
+  text-align:center;
+  font-size:11px;color:var(--muted);line-height:1.6;
+}
+
+/* ── FOOTER ── */
+footer{
+  padding:20px 16px;
+  border-top:1px solid var(--border);
+  text-align:center;
+  font-size:10px;color:var(--muted);letter-spacing:0.05em;line-height:1.8;
+}
+
+.buy-btn.out-of-stock{
+  background:var(--s2);
+  color:var(--muted);
+  border:1px solid var(--border2);
+  cursor:not-allowed;
+  opacity:0.6;
+}
+  
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.hero{animation:fadeUp .4s ease both}
+</style>
 </head>
-
 <body>
-    <h1>Rock Paper Scissors</h1>
-    
-    <button id="start-btn" onclick="startCamera()">Start Camera</button>
-    
-    <button id="play-btn" onclick="startRound()" disabled>Play Round</button>
-    
-    <button onclick="resetScores()">Reset</button>
 
-    <p id="status">Ready</p>
-    <div id="webcam-container"></div>
+<!-- NAV -->
+<nav>
+  <img src="Ride Shop.png" alt="Logo" style="height:40px;width:auto;object-fit:contain;">
+  <div class="cart-btn" onclick="openSheet()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <path d="M16 10a4 4 0 01-8 0"/>
+    </svg>
+    <div class="cart-badge" id="cartBadge">0</div>
+  </div>
+</nav>
 
-    <div id="countdown"></div>
-
-    <div id="gesture-row">
-
-        <div class="gesture-box">
-
-            <div class="gesture-label">You</div>
-
-            <div id="gesture">-</div>
-
-        </div>
-        <div class="gesture-box">
-            <div class="gesture-label">Computer</div>
-            <div id="computer-gesture">-</div>
-        </div>
-    </div>
-<div id="scores">
-
-        <div>Player<span id="p1">0</span></div>
-        <div>Computer <span id="p2">0</span></div>
-
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-title">Всё что вам нужно,<br><em>прямо здесь</em></div>
+  <div class="hero-sub">Выберите товар, оплатите через Kaspi.<br>Без остановок.</div>
 </div>
 
-<div id="result">-</div>
-<script src="script.js"></script>
+<!-- PRODUCTS -->
+<div class="grid" id="grid"></div>
 
+<!-- FOOTER -->
+<footer>Instgram:@justalzhan</footer>
+
+<!-- STICKY CART BAR -->
+<div class="cart-bar" id="cartBar" onclick="openSheet()">
+  <div class="cart-bar-left">
+    <div class="cart-bar-count" id="barCount">0</div>
+    <div class="cart-bar-label">Перейти к оплате</div>
+  </div>
+  <div class="cart-bar-total" id="barTotal">0 ₸</div>
+</div>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay" onclick="closeSheet()"></div>
+
+<!-- CART SHEET -->
+<div class="sheet" id="sheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-head">
+    <div class="sheet-title">Ваш заказ</div>
+    <div class="sheet-x" onclick="closeSheet()">✕</div>
+  </div>
+  <div class="sheet-body" id="sheetBody"></div>
+  <div class="sheet-foot" id="sheetFoot" style="display:none">
+    <div class="total-row">
+      <span class="total-lbl">Итого</span>
+      <span class="total-val" id="totalVal">0 ₸</span>
+    </div>
+    <button class="open-kaspi-btn" onclick="payKaspi()">
+      <img src="kaspilogo.png" style="height:22px;width:auto;object-fit:contain;">
+      Оплатить через Kaspi
+    </button>
+  </div>
+</div>
+
+<!-- PAYMENT SCREEN -->
+<div class="pay-screen" id="payScreen">
+  <div class="pay-top">
+    <div class="pay-back" onclick="closePayScreen()">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      Назад
+    </div>
+  </div>
+  <div class="pay-body">
+    <img src="kaspilogo.png" style="width:70px;height:70px;object-fit:contain;">
+  </div>
+  
+    <div class="pay-number-box">
+      <div class="pay-number-label">Номер телефона</div>
+      <div class="pay-number-value">+7 775 103-58-63</div>
+      <div class="pay-number-label">Альжан Т.</div>
+      <div class="copy-btn" id="copyBtn" onclick="copyNumber()">Копировать</div>
+    </div>
+
+    <div class="pay-amount-box">
+      <div class="pay-amount-label">Сумма к оплате</div>
+      <div class="pay-amount-value" id="payAmount">0 ₸</div>
+    </div>
+
+    <div class="pay-steps">
+      <div class="pay-step">
+        <div class="step-num">1</div>
+        <div class="step-text">Откройте приложение <strong>Kaspi</strong></div>
+      </div>
+      <div class="pay-step">
+        <div class="step-num">2</div>
+        <div class="step-text">Нажмите <strong>Переводы → По номеру телефона</strong></div>
+      </div>
+      <div class="pay-step">
+        <div class="step-num">3</div>
+        <div class="step-text">Вставьте номер <strong>+7 775 103-58-63</strong> и сумму</div>
+      </div>
+      <div class="pay-step">
+        <div class="step-num">4</div>
+        <div class="step-text">Подтвердите платёж — готово!</div>
+      </div>
+      <div class="pay-step">
+        <div class="step-num">5</div>
+        <div class="step-text">Ждите своего заказа</div>
+      </div>
+    </div>
+
+    <div class="pay-footnote">Спасибо за покупку · Приятной Поездки!</div>
+  </div>
+</div>
+
+<script>
+const PRODUCTS = [
+  { id:1, name:'Вода',                  desc:'Негазированная вода Samal, 0.5 л',                         price:450, stock: 6, img:'water.jpg'},
+  { id:2, name:'Протеиновый Батончик',  desc:'Батончик Shaker Royal Hazelnut, 35 г, Без сахара ',        price:1000, stock: 6, img:'water.jpg'},
+  { id:3, name:'Влажные Салфетки',      desc:'Антибактериальные, 15 шт',                                 price:300, stock: 6, img:'water.jpg'},
+  { id:4, name:'Жевательная Резина',    desc:'Dirol со вкусом мяты',                                     price:350, stock: 5, img:'water.jpg'},
+  { id:5, name:'Минеральная Вода',      desc:'Borjomi, 0,5 л',                                           price:850, stock: 4, img:'water.jpg'},
+  { id:6, name:'Мармелад',              desc:'Fruitella',                                                price:500, stock: 4, img:'water.jpg'},
+  { id:7, name:'Батончик',              desc:'Kinder Bueno, молочный шоколад',                           price:800, stock: 5, img:'water.jpg' },
+  { id:8, name:'Протеиновый Батончик',  desc:'Батончик Bombbar, 35 г, 10 г белка, Без сахара ',          price:1000, stock: 6, img:'water.jpg'},
+  { id:9, name:'Конверт для Денег',     desc:'Подарочный конверт',                                       price:500, stock: 0, img:'water.jpg'},
+  { id:10, name:'Подарочный Сертификат', desc:'Подарочный сертификат в "Золотое Яблоко" номиналом 5000', price:500, stock: 0, img:'water.jpg'},
+];
+
+const cart = {};
+
+/* ── RENDER PRODUCTS ── */
+function renderGrid() {
+  const g = document.getElementById('grid');
+  g.innerHTML = PRODUCTS.map(p => `
+    <div class="card">
+      <div class="card-img" style="${p.stock===0?'filter:grayscale(1);opacity:0.4;':''}">
+        <img src="${p.img}" alt="${p.name}" 
+          style="width:100%;height:100%;object-fit:cover;">
+      </div>
+      <div class="card-body">
+        <div class="card-name">${p.name}</div>
+        <div class="card-desc">${p.desc}</div>
+        <div class="card-bottom">
+          <div class="card-price">${p.price} <span>₸</span></div>
+         ${p.stock === 0
+  ? '<button class="buy-btn out-of-stock" disabled>Нет в наличии</button>'
+  : '<button class="buy-btn ' + ((cart[p.id]||0)>0?'in-cart':'') + '" id="btn-'+p.id+'" onclick="addOne('+p.id+')">' + ((cart[p.id]||0)>0 ? '✓ '+cart[p.id] : 'Купить') + '</button>'
+}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function addOne(id) {
+  const p = PRODUCTS.find(p => p.id === id);
+  if((cart[id]||0) >= p.stock) return; // can't add more than stock
+  cart[id] = (cart[id]||0) + 1;
+  updateAll();
+}
+
+function updateAll() {
+  const count = Object.values(cart).reduce((s,v)=>s+v,0);
+  const total = PRODUCTS.reduce((s,p)=>s+(cart[p.id]||0)*p.price,0);
+
+  const badge = document.getElementById('cartBadge');
+  badge.textContent = count;
+  badge.classList.add('pop');
+  setTimeout(()=>badge.classList.remove('pop'),200);
+
+  const bar = document.getElementById('cartBar');
+  if(count>0) bar.classList.add('visible');
+  else bar.classList.remove('visible');
+  document.getElementById('barCount').textContent = count;
+  document.getElementById('barTotal').textContent = total.toLocaleString('ru-RU') + ' ₸';
+
+  PRODUCTS.forEach(p=>{
+    const btn = document.getElementById('btn-'+p.id);
+    if(!btn) return;
+    const q = cart[p.id]||0;
+    btn.textContent = q>0 ? '✓ '+q : 'Купить';
+    btn.className = 'buy-btn' + (q>0?' in-cart':'');
+  });
+
+  if(document.getElementById('sheet').classList.contains('open')) renderSheet();
+}
+
+/* ── SHEET ── */
+function renderSheet() {
+  const body = document.getElementById('sheetBody');
+  const foot = document.getElementById('sheetFoot');
+  const items = PRODUCTS.filter(p=>(cart[p.id]||0)>0);
+  const total = PRODUCTS.reduce((s,p)=>s+(cart[p.id]||0)*p.price,0);
+
+  if(items.length===0){
+    body.innerHTML = '<div class="sheet-empty">Корзина пуста.<br>Добавьте что-нибудь из меню.</div>';
+    foot.style.display='none';
+    return;
+  }
+
+  body.innerHTML = items.map(p=>`
+    <div class="cart-item">
+      <div class="ci-info">
+        <div class="ci-name">${p.name}</div>
+        <div class="ci-price">${p.price.toLocaleString('ru-RU')} ₸ x ${cart[p.id]||0} = ${((cart[p.id]||0)*p.price).toLocaleString('ru-RU')} ₸</div>
+      </div>
+      <div class="ci-qty">
+        <div class="cq-btn" onclick="changeQty(${p.id},-1)">-</div>
+        <div class="cq-num">${cart[p.id]||0}</div>
+        <div class="cq-btn" onclick="changeQty(${p.id},+1)">+</div>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('totalVal').textContent = total.toLocaleString('ru-RU') + ' ₸';
+  foot.style.display='block';
+}
+
+function changeQty(id, delta) {
+  cart[id] = Math.max(0,(cart[id]||0)+delta);
+  if(cart[id]===0) delete cart[id];
+  updateAll();
+  renderSheet();
+}
+
+function openSheet() {
+  renderSheet();
+  document.getElementById('sheet').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeSheet() {
+  document.getElementById('sheet').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+/* ── TELEGRAM ── */
+const TG_TOKEN = '8795943800:AAGTs2A2jxLds6aGKbN59YhfTZ7C7W8jCf8';
+const TG_CHAT  = '640470461';
+
+function sendTelegram(items, total) {
+  const time = new Date().toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit'});
+  const lines = items.map(p =>
+    p.name + ' x' + cart[p.id] + ' = ' + (cart[p.id]*p.price) + ' T'
+  ).join('\n');
+  const msg = 'New Order (' + time + ')\n\n' + lines + '\n\nTotal: ' + total + ' T\n\nTransfer: +77751035863';
+  const url = 'https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage?chat_id=' + TG_CHAT + '&text=' + encodeURIComponent(msg);
+  fetch(url).catch(function(){});
+}
+
+/* ── KASPI PAY ── */
+function payKaspi() {
+  const items = PRODUCTS.filter(p=>(cart[p.id]||0)>0);
+  if(items.length===0) return;
+  const total = PRODUCTS.reduce((s,p)=>s+(cart[p.id]||0)*p.price,0);
+  document.getElementById('payAmount').textContent = total.toLocaleString('ru-RU') + ' ₸';
+  sendTelegram(items, total);
+  closeSheet();
+  document.getElementById('payScreen').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closePayScreen() {
+  document.getElementById('payScreen').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function copyNumber() {
+  const num = '+77751035863';
+  if(navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(num).then(showCopied).catch(fallbackCopy);
+  } else {
+    fallbackCopy();
+  }
+}
+
+function fallbackCopy() {
+  const el = document.createElement('textarea');
+  el.value = '+77751035863';
+  el.style.position='fixed';el.style.opacity='0';
+  document.body.appendChild(el);
+  el.focus();el.select();
+  document.execCommand('copy');
+  document.body.removeChild(el);
+  showCopied();
+}
+
+function showCopied() {
+  const btn = document.getElementById('copyBtn');
+  btn.textContent = 'Скопировано';
+  btn.classList.add('copied');
+  setTimeout(()=>{
+    btn.textContent = 'Копировать';
+    btn.classList.remove('copied');
+  }, 2000);
+}
+
+renderGrid();
+</script>
 </body>
 </html>
