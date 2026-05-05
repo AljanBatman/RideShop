@@ -467,6 +467,14 @@ footer{
   font-size:10px;color:var(--muted);letter-spacing:0.05em;line-height:1.8;
 }
 
+.buy-btn.out-of-stock{
+  background:var(--s2);
+  color:var(--muted);
+  border:1px solid var(--border2);
+  cursor:not-allowed;
+  opacity:0.6;
+}
+  
 @keyframes fadeUp{
   from{opacity:0;transform:translateY(12px)}
   to{opacity:1;transform:translateY(0)}
@@ -586,12 +594,16 @@ footer{
 
 <script>
 const PRODUCTS = [
-  { id:1, name:'Вода',                  desc:'Минеральная, 0.5 л',          price:250 },
-  { id:2, name:'Протеиновый Батончик',  desc:'Шоколад, 60 г',               price:800 },
-  { id:3, name:'Влажные Салфетки',      desc:'Антибактериальные, 10 шт',    price:350 },
-  { id:4, name:'Жвачка',                desc:'Мята, 5 подушечек',           price:200 },
-  { id:5, name:'Конверт для Денег',     desc:'Подарочный конверт',          price:500 },
-  { id:6, name:'Подарочный Сертификат', desc:'Электронный, на любую сумму', price:500 },
+  { id:1, name:'Вода',                  desc:'Негазированная вода Samal, 0.5 л',                         price:450, stock: 6, img:'water.jpg'},
+  { id:2, name:'Протеиновый Батончик',  desc:'Батончик Shaker Royal Hazelnut, 35 г, Без сахара ',        price:1000, stock: 6, img:'water.jpg'},
+  { id:3, name:'Влажные Салфетки',      desc:'Антибактериальные, 15 шт',                                 price:300, stock: 6, img:'water.jpg'},
+  { id:4, name:'Жевательная Резина',    desc:'Dirol со вкусом мяты',                                     price:350, stock: 5, img:'water.jpg'},
+  { id:5, name:'Минеральная Вода',      desc:'Borjomi, 0,5 л',                                           price:850, stock: 4, img:'water.jpg'},
+  { id:6, name:'Мармелад',              desc:'Fruitella',                                                price:500, stock: 4, img:'water.jpg'},
+  { id:7, name:'Батончик',              desc:'Kinder Bueno, молочный шоколад',                           price:800, stock: 5, img:'water.jpg' },
+  { id:8, name:'Протеиновый Батончик',  desc:'Батончик Bombbar, 35 г, 10 г белка, Без сахара ',          price:1000, stock: 6, img:'water.jpg'},
+  { id:9, name:'Конверт для Денег',     desc:'Подарочный конверт',                                       price:500, stock: 0, img:'water.jpg'},
+  { id:10, name:'Подарочный Сертификат', desc:'Подарочный сертификат в "Золотое Яблоко" номиналом 5000', price:500, stock: 0, img:'water.jpg'},
 ];
 
 const cart = {};
@@ -601,26 +613,19 @@ function renderGrid() {
   const g = document.getElementById('grid');
   g.innerHTML = PRODUCTS.map(p => `
     <div class="card">
-      <div class="card-img">
-        <div class="img-icon">
-          <svg viewBox="0 0 24 24" stroke-width="1.3">
-            <rect x="3" y="3" width="18" height="18" rx="2"/>
-            <circle cx="8.5" cy="8.5" r="1.5"/>
-            <polyline points="21 15 16 10 5 21"/>
-          </svg>
-        </div>
-        <span class="img-hint">Фото</span>
+      <div class="card-img" style="${p.stock===0?'filter:grayscale(1);opacity:0.4;':''}">
+        <img src="${p.img}" alt="${p.name}" 
+          style="width:100%;height:100%;object-fit:cover;">
       </div>
       <div class="card-body">
         <div class="card-name">${p.name}</div>
         <div class="card-desc">${p.desc}</div>
         <div class="card-bottom">
           <div class="card-price">${p.price} <span>₸</span></div>
-          <button class="buy-btn ${(cart[p.id]||0)>0?'in-cart':''}"
-            id="btn-${p.id}"
-            onclick="addOne(${p.id})">
-            ${(cart[p.id]||0)>0 ? '✓ '+cart[p.id] : 'Купить'}
-          </button>
+         ${p.stock === 0
+  ? '<button class="buy-btn out-of-stock" disabled>Нет в наличии</button>'
+  : '<button class="buy-btn ' + ((cart[p.id]||0)>0?'in-cart':'') + '" id="btn-'+p.id+'" onclick="addOne('+p.id+')">' + ((cart[p.id]||0)>0 ? '✓ '+cart[p.id] : 'Купить') + '</button>'
+}
         </div>
       </div>
     </div>
@@ -628,6 +633,8 @@ function renderGrid() {
 }
 
 function addOne(id) {
+  const p = PRODUCTS.find(p => p.id === id);
+  if((cart[id]||0) >= p.stock) return; // can't add more than stock
   cart[id] = (cart[id]||0) + 1;
   updateAll();
 }
