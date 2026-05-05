@@ -757,7 +757,7 @@ function sendTelegram(items, total) {
   const lines = items.map(p =>
     p.name + ' x' + cart[p.id] + ' = ' + (cart[p.id]*p.price) + ' T'
   ).join('\n');
-  const msg = 'NOVIY ZAKAZ (' + time + ')\n\n' + lines + '\n\nITOGO: ' + total + ' T\n\nPerevod: +77751035863';
+  const msg = 'New Order (' + time + ')\n\n' + lines + '\n\nTotal: ' + total + ';
   const url = 'https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage?chat_id=' + TG_CHAT + '&text=' + encodeURIComponent(msg);
   fetch(url).catch(function(){});
 }
