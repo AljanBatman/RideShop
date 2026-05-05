@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+a<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
@@ -757,7 +757,7 @@ function sendTelegram(items, total) {
   const lines = items.map(p =>
     p.name + ' x' + cart[p.id] + ' = ' + (cart[p.id]*p.price) + ' T'
   ).join('\n');
-  const msg = 'New Order (' + time + ')\n\n' + lines + '\n\nTotal: ' + total + ';
+  const msg = 'New Order (' + time + ')\n\n' + lines + '\n\nTotal: ' + total + ' ;
   const url = 'https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage?chat_id=' + TG_CHAT + '&text=' + encodeURIComponent(msg);
   fetch(url).catch(function(){});
 }
