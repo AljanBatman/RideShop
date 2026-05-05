@@ -1,4 +1,4 @@
-a<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
@@ -18,6 +18,9 @@ a<!DOCTYPE html>
   --border:#1f1f1f;
   --border2:#2a2a2a;
   --border3:#333;
+  --kaspi:#e31e24;
+  --kaspi2:#ff2d2d;
+  --kaspi-dim:rgba(227,30,36,0.12);
   --gold:#c4a24a;
   --gold2:#dbb96a;
   --gold-dim:rgba(196,162,74,0.12);
@@ -25,8 +28,6 @@ a<!DOCTYPE html>
   --text2:#b0aa9f;
   --muted:#5a5650;
   --muted2:#2e2c2a;
-  --kaspi:#003dcc;
-  --kaspi2:#0047ee;
   --font:'Karla',sans-serif;
   --font-d:'Cormorant',serif;
   --r:14px;
@@ -48,7 +49,7 @@ body{
 /* ── NAV ── */
 nav{
   position:sticky;top:0;z-index:50;
-  background:rgba(8,8,8,0.9);
+  background:rgba(0,0,0,0.92);
   backdrop-filter:blur(24px);
   -webkit-backdrop-filter:blur(24px);
   border-bottom:1px solid var(--border);
@@ -57,14 +58,6 @@ nav{
   align-items:center;
   justify-content:space-between;
   padding:0 16px;
-}
-
-.logo-slot{
-  width:90px;height:32px;
-  border:1px dashed var(--border3);
-  border-radius:6px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:10px;color:var(--muted);letter-spacing:0.06em;
 }
 
 .cart-btn{
@@ -77,7 +70,6 @@ nav{
   color:var(--text2);
   cursor:pointer;
   transition:border-color .2s,color .2s;
-  position:relative;
 }
 .cart-btn:active{background:var(--s3)}
 
@@ -88,7 +80,6 @@ nav{
   width:16px;height:16px;
   font-size:9px;font-weight:600;
   display:flex;align-items:center;justify-content:center;
-  transition:transform .15s;
 }
 .cart-badge.pop{animation:pop .2s ease}
 @keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.5)}100%{transform:scale(1)}}
@@ -98,10 +89,6 @@ nav{
   padding:24px 16px 18px;
   border-bottom:1px solid var(--border);
   animation:fadeUp .45s ease both;
-}
-.hero-tag{
-  font-size:10px;letter-spacing:0.2em;text-transform:uppercase;
-  color:var(--gold);margin-bottom:8px;font-weight:400;
 }
 .hero-title{
   font-family:var(--font-d);
@@ -114,23 +101,12 @@ nav{
   font-size:12px;color:var(--muted);font-weight:300;line-height:1.6;
 }
 
-/* ── SECTION ── */
-.section-row{
-  display:flex;align-items:center;gap:10px;
-  padding:20px 16px 10px;
-}
-.section-label{
-  font-size:10px;letter-spacing:0.18em;text-transform:uppercase;
-  color:var(--muted);font-weight:400;white-space:nowrap;
-}
-.section-line{flex:1;height:1px;background:var(--border)}
-
 /* ── PRODUCT GRID ── */
 .grid{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:10px;
-  padding:0 16px;
+  padding:16px 16px 0;
 }
 
 /* ── PRODUCT CARD ── */
@@ -147,6 +123,8 @@ nav{
 .card:nth-child(2){animation-delay:.12s}
 .card:nth-child(3){animation-delay:.17s}
 .card:nth-child(4){animation-delay:.22s}
+.card:nth-child(5){animation-delay:.27s}
+.card:nth-child(6){animation-delay:.32s}
 
 .card-img{
   width:100%;
@@ -239,7 +217,7 @@ nav{
 .cart-bar.visible{transform:translateX(-50%) translateY(0)}
 .cart-bar-left{display:flex;align-items:center;gap:10px}
 .cart-bar-count{
-  background:rgba(255,255,255,0.2);
+  background:rgba(255,255,255,0.25);
   border-radius:50%;
   width:26px;height:26px;
   display:flex;align-items:center;justify-content:center;
@@ -259,11 +237,9 @@ nav{
   z-index:70;
   pointer-events:none;
   transition:background .3s;
-  backdrop-filter:blur(0px);
-  -webkit-backdrop-filter:blur(0px);
 }
 .overlay.open{
-  background:rgba(0,0,0,0.65);
+  background:rgba(0,0,0,0.7);
   pointer-events:all;
   backdrop-filter:blur(6px);
   -webkit-backdrop-filter:blur(6px);
@@ -306,12 +282,9 @@ nav{
   border-radius:50%;
   display:flex;align-items:center;justify-content:center;
   cursor:pointer;font-size:13px;color:var(--muted);
-  transition:background .15s;
 }
 .sheet-x:active{background:var(--s3)}
-
 .sheet-body{overflow-y:auto;flex:1;padding:0 18px}
-
 .sheet-empty{
   text-align:center;padding:40px 0;
   color:var(--muted);font-size:13px;font-weight:300;line-height:1.7;
@@ -326,9 +299,7 @@ nav{
 .ci-info{flex:1;min-width:0}
 .ci-name{font-size:13px;font-weight:500;margin-bottom:2px;color:var(--text)}
 .ci-price{font-size:11px;color:var(--gold);font-weight:300}
-.ci-qty{
-  display:flex;align-items:center;gap:8px;flex-shrink:0;
-}
+.ci-qty{display:flex;align-items:center;gap:8px;flex-shrink:0}
 .cq-btn{
   width:26px;height:26px;
   background:var(--s2);border:1px solid var(--border2);
@@ -350,11 +321,23 @@ nav{
   display:flex;justify-content:space-between;align-items:baseline;
   margin-bottom:14px;
 }
-.total-lbl{
-  font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);
+.total-lbl{font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted)}
+.total-val{font-family:var(--font-d);font-size:26px;font-weight:300;color:var(--gold2)}
+
+.open-kaspi-btn{
+  width:100%;height:54px;
+  background:var(--kaspi);
+  border:none;border-radius:var(--r-sm);
+  font-family:var(--font);font-size:15px;font-weight:600;
+  color:#fff;letter-spacing:0.03em;
+  cursor:pointer;
+  transition:background .15s,transform .1s;
+  display:flex;align-items:center;justify-content:center;gap:10px;
 }
-.total-val{
-  font-family:var(--font-d);font-size:26px;font-weight:300;color:var(--gold2);
+.open-kaspi-btn:active{transform:scale(0.98);background:var(--kaspi2)}
+.pay-note{
+  margin-top:10px;text-align:center;
+  font-size:10px;color:var(--muted);line-height:1.5;
 }
 
 /* ── PAYMENT SCREEN ── */
@@ -366,17 +349,18 @@ nav{
   flex-direction:column;
   max-width:430px;
   margin:0 auto;
+  overflow-y:auto;
 }
 .pay-screen.open{display:flex}
 
 .pay-top{
-  display:flex;align-items:center;justify-content:space-between;
   padding:18px 18px 0;
+  flex-shrink:0;
 }
 .pay-back{
   display:flex;align-items:center;gap:6px;
   font-size:13px;color:var(--muted);cursor:pointer;
-  padding:8px 0;
+  padding:8px 0;width:fit-content;
 }
 .pay-back svg{width:16px;height:16px;stroke:var(--muted);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .pay-back:active{color:var(--text)}
@@ -384,9 +368,8 @@ nav{
 .pay-body{
   flex:1;
   display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  padding:0 28px 40px;
-  gap:0;
+  align-items:center;
+  padding:24px 28px 48px;
 }
 
 .pay-kaspi-badge{
@@ -396,39 +379,14 @@ nav{
   display:flex;align-items:center;justify-content:center;
   font-size:28px;font-weight:700;color:#fff;
   font-family:var(--font);
-  margin-bottom:24px;
-  box-shadow:0 8px 32px rgba(0,61,204,0.35);
+  margin-bottom:16px;
+  box-shadow:0 8px 32px rgba(227,30,36,0.35);
 }
-
 .pay-instruction{
   font-size:11px;letter-spacing:0.14em;text-transform:uppercase;
-  color:var(--muted);margin-bottom:20px;text-align:center;
+  color:var(--muted);margin-bottom:24px;text-align:center;
 }
 
-.pay-steps{
-  width:100%;
-  display:flex;flex-direction:column;
-  gap:0;
-  margin-bottom:28px;
-}
-.pay-step{
-  display:flex;align-items:flex-start;gap:14px;
-  padding:14px 0;
-  border-bottom:1px solid var(--border);
-}
-.pay-step:last-child{border:none}
-.step-num{
-  width:22px;height:22px;
-  border:1px solid var(--border2);
-  border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:11px;font-weight:500;color:var(--muted);
-  flex-shrink:0;margin-top:1px;
-}
-.step-text{font-size:13px;color:var(--text2);line-height:1.5;flex:1}
-.step-text strong{color:var(--text);font-weight:500}
-
-/* Big number display */
 .pay-number-box{
   width:100%;
   background:var(--s1);
@@ -473,26 +431,31 @@ nav{
   font-size:34px;font-weight:300;color:var(--gold2);
 }
 
-.open-kaspi-btn{
-  width:100%;height:54px;
-  background:var(--kaspi);
-  border:none;border-radius:var(--r-sm);
-  font-family:var(--font);font-size:15px;font-weight:600;
-  color:#fff;letter-spacing:0.03em;
-  cursor:pointer;
-  transition:background .15s,transform .1s;
-  display:flex;align-items:center;justify-content:center;gap:10px;
+.pay-steps{
+  width:100%;
+  display:flex;flex-direction:column;
+  margin-bottom:16px;
 }
-.open-kaspi-btn:active{transform:scale(0.98);background:var(--kaspi2)}
+.pay-step{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:13px 0;
+  border-bottom:1px solid var(--border);
+}
+.pay-step:last-child{border:none}
+.step-num{
+  width:22px;height:22px;
+  border:1px solid var(--border2);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:500;color:var(--muted);
+  flex-shrink:0;margin-top:1px;
+}
+.step-text{font-size:13px;color:var(--text2);line-height:1.5;flex:1}
+.step-text strong{color:var(--text);font-weight:500}
 
 .pay-footnote{
-  margin-top:14px;text-align:center;
+  text-align:center;
   font-size:11px;color:var(--muted);line-height:1.6;
-}
-
-.pay-note{
-  margin-top:10px;text-align:center;
-  font-size:10px;color:var(--muted);letter-spacing:0.04em;line-height:1.5;
 }
 
 /* ── FOOTER ── */
@@ -503,7 +466,6 @@ footer{
   font-size:10px;color:var(--muted);letter-spacing:0.05em;line-height:1.8;
 }
 
-/* ── ANIMATIONS ── */
 @keyframes fadeUp{
   from{opacity:0;transform:translateY(12px)}
   to{opacity:1;transform:translateY(0)}
@@ -515,7 +477,7 @@ footer{
 
 <!-- NAV -->
 <nav>
-  <img src="Ride Shop.png" alt="Logo" style="height:50px;width:auto;object-fit:contain;">
+  <img src="Ride Shop.png" alt="Logo" style="height:40px;width:auto;object-fit:contain;">
   <div class="cart-btn" onclick="openSheet()">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
       <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
@@ -528,20 +490,15 @@ footer{
 
 <!-- HERO -->
 <div class="hero">
-  <div class="hero-title">Вcё что вам нужно,<br><em>прямо здесь</em></div>
+  <div class="hero-title">Всё что вам нужно,<br><em>прямо здесь</em></div>
   <div class="hero-sub">Выберите товар, оплатите через Kaspi.<br>Без остановок.</div>
 </div>
 
 <!-- PRODUCTS -->
-<div class="section-row">
-</div>
-
 <div class="grid" id="grid"></div>
 
 <!-- FOOTER -->
-<footer>
-  Оплата через Kaspi · Безопасно · Мгновенно
-</footer>
+<footer>Оплата через Kaspi · Безопасно · Мгновенно</footer>
 
 <!-- STICKY CART BAR -->
 <div class="cart-bar" id="cartBar" onclick="openSheet()">
@@ -618,21 +575,22 @@ footer{
       </div>
       <div class="pay-step">
         <div class="step-num">5</div>
-        <div class="step-text">Дождитесь пока я выдаду вам ваш заказ</div>
+        <div class="step-text">Дождитесь пока я выдам вам ваш заказ</div>
       </div>
     </div>
 
+    <div class="pay-footnote">Оплата поступит мгновенно · Без комиссии</div>
   </div>
 </div>
 
 <script>
 const PRODUCTS = [
-  { id:1, name:'Вода', desc:'Минеральная, 0.5 л', price:250 },
-  { id:2, name:'Протеиновый Батончик', desc:'Шоколад, 60 г', price:800 },
-  { id:3, name:'Влажные Салфетки', desc:'Антибактериальные, 10 шт', price:350 },
-  { id:4, name:'Жвачка', desc:'Мята, 5 подушечек', price:200 },
-  { id:5, name:'Конверт для Денег', desc:'Мята, 5 подушечек', price:500 },
-  { id:6, name:'Подарочный Сертификат', desc:'Мята, 5 подушечек', price:500 },
+  { id:1, name:'Вода',                  desc:'Минеральная, 0.5 л',          price:250 },
+  { id:2, name:'Протеиновый Батончик',  desc:'Шоколад, 60 г',               price:800 },
+  { id:3, name:'Влажные Салфетки',      desc:'Антибактериальные, 10 шт',    price:350 },
+  { id:4, name:'Жвачка',                desc:'Мята, 5 подушечек',           price:200 },
+  { id:5, name:'Конверт для Денег',     desc:'Подарочный конверт',          price:500 },
+  { id:6, name:'Подарочный Сертификат', desc:'Электронный, на любую сумму', price:500 },
 ];
 
 const cart = {};
@@ -640,7 +598,7 @@ const cart = {};
 /* ── RENDER PRODUCTS ── */
 function renderGrid() {
   const g = document.getElementById('grid');
-  g.innerHTML = PRODUCTS.map((p,i) => `
+  g.innerHTML = PRODUCTS.map(p => `
     <div class="card">
       <div class="card-img">
         <div class="img-icon">
@@ -660,7 +618,7 @@ function renderGrid() {
           <button class="buy-btn ${(cart[p.id]||0)>0?'in-cart':''}"
             id="btn-${p.id}"
             onclick="addOne(${p.id})">
-            ${(cart[p.id]||0)>0 ? `✓ ${cart[p.id]}` : 'Купить'}
+            ${(cart[p.id]||0)>0 ? '✓ '+cart[p.id] : 'Купить'}
           </button>
         </div>
       </div>
@@ -677,29 +635,25 @@ function updateAll() {
   const count = Object.values(cart).reduce((s,v)=>s+v,0);
   const total = PRODUCTS.reduce((s,p)=>s+(cart[p.id]||0)*p.price,0);
 
-  // badge
   const badge = document.getElementById('cartBadge');
   badge.textContent = count;
   badge.classList.add('pop');
   setTimeout(()=>badge.classList.remove('pop'),200);
 
-  // cart bar
   const bar = document.getElementById('cartBar');
   if(count>0) bar.classList.add('visible');
   else bar.classList.remove('visible');
   document.getElementById('barCount').textContent = count;
   document.getElementById('barTotal').textContent = total.toLocaleString('ru-RU') + ' ₸';
 
-  // update buttons
   PRODUCTS.forEach(p=>{
     const btn = document.getElementById('btn-'+p.id);
     if(!btn) return;
     const q = cart[p.id]||0;
-    btn.textContent = q>0 ? `✓ ${q}` : 'Купить';
+    btn.textContent = q>0 ? '✓ '+q : 'Купить';
     btn.className = 'buy-btn' + (q>0?' in-cart':'');
   });
 
-  // if sheet open, re-render
   if(document.getElementById('sheet').classList.contains('open')) renderSheet();
 }
 
@@ -712,7 +666,7 @@ function renderSheet() {
 
   if(items.length===0){
     body.innerHTML = '<div class="sheet-empty">Корзина пуста.<br>Добавьте что-нибудь из меню.</div>';
-    foot.style.display = 'none';
+    foot.style.display='none';
     return;
   }
 
@@ -720,10 +674,10 @@ function renderSheet() {
     <div class="cart-item">
       <div class="ci-info">
         <div class="ci-name">${p.name}</div>
-        <div class="ci-price">${p.price.toLocaleString('ru-RU')} ₸ × ${cart[p.id]||0} = ${((cart[p.id]||0)*p.price).toLocaleString('ru-RU')} ₸</div>
+        <div class="ci-price">${p.price.toLocaleString('ru-RU')} ₸ x ${cart[p.id]||0} = ${((cart[p.id]||0)*p.price).toLocaleString('ru-RU')} ₸</div>
       </div>
       <div class="ci-qty">
-        <div class="cq-btn" onclick="changeQty(${p.id},-1)">−</div>
+        <div class="cq-btn" onclick="changeQty(${p.id},-1)">-</div>
         <div class="cq-num">${cart[p.id]||0}</div>
         <div class="cq-btn" onclick="changeQty(${p.id},+1)">+</div>
       </div>
@@ -731,7 +685,7 @@ function renderSheet() {
   `).join('');
 
   document.getElementById('totalVal').textContent = total.toLocaleString('ru-RU') + ' ₸';
-  foot.style.display = 'block';
+  foot.style.display='block';
 }
 
 function changeQty(id, delta) {
@@ -754,26 +708,27 @@ function closeSheet() {
   document.body.style.overflow='';
 }
 
+/* ── TELEGRAM ── */
 const TG_TOKEN = '8795943800:AAGTs2A2jxLds6aGKbN59YhfTZ7C7W8jCf8';
 const TG_CHAT  = '640470461';
- 
+
 function sendTelegram(items, total) {
   const time = new Date().toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit'});
   const lines = items.map(p =>
     p.name + ' x' + cart[p.id] + ' = ' + (cart[p.id]*p.price) + ' T'
   ).join('\n');
-  const msg = 'New Order (' + time + ')\n\n' + lines + '\n\nTotal: ' + total + ' ;
+  const msg = 'New Order (' + time + ')\n\n' + lines + '\n\nTotal: ' + total + ' T\n\nTransfer: +77751035863';
   const url = 'https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage?chat_id=' + TG_CHAT + '&text=' + encodeURIComponent(msg);
   fetch(url).catch(function(){});
 }
-  
+
 /* ── KASPI PAY ── */
 function payKaspi() {
   const items = PRODUCTS.filter(p=>(cart[p.id]||0)>0);
   if(items.length===0) return;
   const total = PRODUCTS.reduce((s,p)=>s+(cart[p.id]||0)*p.price,0);
   document.getElementById('payAmount').textContent = total.toLocaleString('ru-RU') + ' ₸';
-  sendTelegram(items, total); 
+  sendTelegram(items, total);
   closeSheet();
   document.getElementById('payScreen').classList.add('open');
   document.body.style.overflow='hidden';
@@ -785,30 +740,33 @@ function closePayScreen() {
 }
 
 function copyNumber() {
-  navigator.clipboard.writeText('+77751035863').then(()=>{
-    const btn = document.getElementById('copyBtn');
-    btn.textContent = '✓ Скопировано';
-    btn.classList.add('copied');
-    setTimeout(()=>{
-      btn.textContent = 'Копировать';
-      btn.classList.remove('copied');
-    }, 2000);
-  }).catch(()=>{
-    // Fallback for older phones
-    const el = document.createElement('textarea');
-    el.value = '+77751035863';
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
-    const btn = document.getElementById('copyBtn');
-    btn.textContent = '✓ Скопировано';
-    btn.classList.add('copied');
-    setTimeout(()=>{
-      btn.textContent = 'Копировать';
-      btn.classList.remove('copied');
-    }, 2000);
-  });
+  const num = '+77751035863';
+  if(navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(num).then(showCopied).catch(fallbackCopy);
+  } else {
+    fallbackCopy();
+  }
+}
+
+function fallbackCopy() {
+  const el = document.createElement('textarea');
+  el.value = '+77751035863';
+  el.style.position='fixed';el.style.opacity='0';
+  document.body.appendChild(el);
+  el.focus();el.select();
+  document.execCommand('copy');
+  document.body.removeChild(el);
+  showCopied();
+}
+
+function showCopied() {
+  const btn = document.getElementById('copyBtn');
+  btn.textContent = 'Скопировано';
+  btn.classList.add('copied');
+  setTimeout(()=>{
+    btn.textContent = 'Копировать';
+    btn.classList.remove('copied');
+  }, 2000);
 }
 
 renderGrid();
